@@ -3,9 +3,17 @@
 
 layout(local_size_x = 16, local_size_y = 8, local_size_z = 1) in;
 
+struct Ray
+{
+    vec3 origin;
+    vec3 direction;
+    float intersect;
+    int primitiveID;
+};
+
 layout(binding = 0, set = 0, scalar) buffer rayBuffer
 {
-    vec3 rayData[];
+    Ray rayData[];
 };
 
 // Steps the RNG and returns a floating-point value between 0 and 1 inclusive.
@@ -60,6 +68,6 @@ void main()
 
     // Get the index of this invocation in the buffer:
     uint indexOffset = resolution.x * pixel.y + pixel.x;
-    rayData[indexOffset * 2] = rayOrigin;
-    rayData[indexOffset * 2 + 1] = rayDirection;
+    rayData[indexOffset].origin = rayOrigin;
+    rayData[indexOffset].direction = rayDirection;
 }
